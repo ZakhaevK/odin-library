@@ -1,8 +1,23 @@
+// Document elements
+const libContainer = document.getElementById('library');
+const submitInput = document.getElementById('g-submit');
+const titleInput = document.getElementById('g-title');
+const devInput = document.getElementById('g-dev');
+const lengthInput = document.getElementById('g-length');
+const playedInput = document.getElementById('g-played');
+
+
 const myLibrary = [];
 
-const libContainer = document.getElementById('library');
+const exampleGame = new Game("Warcraft III", 
+                              "Blizzard Entertainment",
+                              100,
+                              true);
 
-function game(title, dev, length, played) {
+addGameToLibrary(exampleGame);
+displayGames();
+
+function Game(title, dev, length, played) {
   this.title = title;
   this.dev = dev;
   this.length = length;
@@ -21,6 +36,8 @@ function addGameToLibrary(game) {
 }
 
 function displayGames() {
+   libContainer.replaceChildren("");
+
   for (game of myLibrary) {
     const newGame = document.createElement('div');
     newGame.className = "game";
@@ -49,3 +66,16 @@ function displayGames() {
     libContainer.appendChild(newGame);
   }
 }
+
+// Event Listeners
+submitInput.addEventListener('click', () => {
+  const title = titleInput.value;
+  const dev = devInput.value;
+  const length = lengthInput.value;
+  const played = playedInput.checked;
+
+  const newGame = new Game(title, dev, length, played);
+
+  addGameToLibrary(newGame);
+  displayGames();
+})
