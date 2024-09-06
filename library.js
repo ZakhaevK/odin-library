@@ -68,7 +68,8 @@ function displayGames() {
 }
 
 // Event Listeners
-submitInput.addEventListener('click', () => {
+submitInput.addEventListener('click', (e) => {
+  e.preventDefault();
   const title = titleInput.value;
   const dev = devInput.value;
   const length = lengthInput.value;
