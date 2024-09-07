@@ -6,10 +6,9 @@ const devInput = document.getElementById('g-dev');
 const lengthInput = document.getElementById('g-length');
 const playedInput = document.getElementById('g-played');
 
-
 const myLibrary = [];
 
-const exampleGame = new Game("Warcraft III", 
+const exampleGame = new Game( "Warcraft III", 
                               "Blizzard Entertainment",
                               100,
                               true);
@@ -35,36 +34,55 @@ function addGameToLibrary(game) {
   myLibrary.push(game);
 }
 
+
 function displayGames() {
-   libContainer.replaceChildren("");
+  libContainer.replaceChildren("");
 
-  for (game of myLibrary) {
-    const newGame = document.createElement('div');
-    newGame.className = "game";
+ myLibrary.forEach((game, index) => {
+   const newGame = document.createElement('div');
+   newGame.className = "game";
 
-    const titleH2 = document.createElement('h2');
-    titleH2.textContent = game.title;
+   const titleH2 = document.createElement('h2');
+   titleH2.textContent = game.title;
 
-    const devPara = document.createElement('p');
-    devPara.textContent = `Developer: ${game.dev}`;
+   const devPara = document.createElement('p');
+   devPara.textContent = `Developer: ${game.dev}`;
 
-    const lengthPara = document.createElement('p');
-    lengthPara.textContent = `Length: ${game.length} hours`;
+   const lengthPara = document.createElement('p');
+   lengthPara.textContent = `Length: ${game.length} hours`;
 
-    const playedPara = document.createElement('p');
-    if (game.played) {
-      playedPara.textContent = 'Played: Yes';
-    } else {
-      playedPara.textContent = 'Played: No';
-    }
+   const playedPara = document.createElement('p');
+   playedPara.textContent = game.played ? 'Played: Yes' : 'Played: No';
 
-    // Add to document
-    newGame.appendChild(titleH2);
-    newGame.appendChild(devPara);
-    newGame.appendChild(lengthPara);
-    newGame.appendChild(playedPara);
-    libContainer.appendChild(newGame);
-  }
+   const togglepara = document.createElement('p');
+   togglepara.textContent = 'Update Game Details:';
+
+   const playButt = document.createElement('button');
+   playButt.textContent = 'Played';
+   playButt.addEventListener('click', () => {
+     game.played = !game.played;
+     displayGames();
+   });
+
+   const deleteButt = document.createElement('button');
+   deleteButt.textContent = 'Delete';
+   deleteButt.addEventListener('click', () => {
+     myLibrary.splice(index, 1); 
+     displayGames(); 
+   });
+
+   // Add elements to newGame div
+   newGame.appendChild(titleH2);
+   newGame.appendChild(devPara);
+   newGame.appendChild(lengthPara);
+   newGame.appendChild(playedPara);
+   newGame.appendChild(togglepara);
+   newGame.appendChild(playButt);
+   newGame.appendChild(deleteButt);
+   
+   // Append the game to the library container
+   libContainer.appendChild(newGame);
+ });
 }
 
 // Event Listeners
@@ -80,3 +98,5 @@ submitInput.addEventListener('click', (e) => {
   addGameToLibrary(newGame);
   displayGames();
 })
+
+
