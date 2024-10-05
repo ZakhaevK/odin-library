@@ -9,18 +9,43 @@ const playedInput = document.getElementById('g-played');
 const myLibrary = [];
 
 class Game {
+  #title;
+  #dev;
+  #length;
+  #played;
+
   constructor(title, dev, length, played) {
-    this.title = title;
-    this.dev = dev;
-    this.length = length;
-    this.played = played;
+    this.#title = title;
+    this.#dev = dev;
+    this.#length = length;
+    this.#played = played;
   }
 
-  getInfo() {
-    if (this.played) {
-      return `${this.title}, developed by ${this.dev}, with a length of ${this.length} hours, have played it.`
+  static getTitle(Game) {
+    return Game.#title;
+  }
+
+  static getDev(Game) {
+    return Game.#dev;
+  }
+
+  static getLength(Game) {
+    return Game.#length;
+  }
+
+  static getPlayed(Game) {
+    return Game.#played;
+  }
+
+  static togglePlayed(Game) {
+    Game.#played = !Game.#played;
+  }
+
+  static getInfo(Game) {
+    if (Game.played) {
+      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, have played it.`
     } else {
-      return `${this.title}, developed by ${this.dev}, with a length of ${this.length} hours, currently not played.`
+      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, currently not played.`
     }
   }
 }
@@ -28,8 +53,6 @@ class Game {
 function addGameToLibrary(game) {
   myLibrary.push(game);
 }
-
-
 
 const exampleGame = new Game( "Warcraft III", 
   "Blizzard Entertainment",
@@ -41,22 +64,22 @@ displayGames();
 
 function displayGames() {
   libContainer.replaceChildren("");
-  
+
  myLibrary.forEach((game, index) => {
    const newGame = document.createElement('div');
    newGame.className = "game";
 
    const titleH2 = document.createElement('h2');
-   titleH2.textContent = game.title;
+   titleH2.textContent = Game.getTitle(game);
 
    const devPara = document.createElement('p');
-   devPara.textContent = `Developer: ${game.dev}`;
+   devPara.textContent = `Developer: ${Game.getDev(game)}`;
 
    const lengthPara = document.createElement('p');
-   lengthPara.textContent = `Length: ${game.length} hours`;
+   lengthPara.textContent = `Length: ${Game.getLength(game)} hours`;
 
    const playedPara = document.createElement('p');
-   playedPara.textContent = game.played ? 'Played: Yes' : 'Played: No';
+   playedPara.textContent = Game.getPlayed(game) ? 'Played: Yes' : 'Played: No';
 
    const togglepara = document.createElement('p');
    togglepara.textContent = 'Update Game Details:';
@@ -64,7 +87,7 @@ function displayGames() {
    const playButt = document.createElement('button');
    playButt.textContent = 'Played';
    playButt.addEventListener('click', () => {
-     game.played = !game.played;
+     Game.togglePlayed(game);
      displayGames();
    });
 
