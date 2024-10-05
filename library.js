@@ -8,20 +8,15 @@ const playedInput = document.getElementById('g-played');
 
 const myLibrary = [];
 
-const exampleGame = new Game( "Warcraft III", 
-                              "Blizzard Entertainment",
-                              100,
-                              true);
+class Game {
+  constructor(title, dev, length, played) {
+    this.title = title;
+    this.dev = dev;
+    this.length = length;
+    this.played = played;
+  }
 
-addGameToLibrary(exampleGame);
-displayGames();
-
-function Game(title, dev, length, played) {
-  this.title = title;
-  this.dev = dev;
-  this.length = length;
-  this.played = played;
-  this.info = function () {
+  getInfo() {
     if (this.played) {
       return `${this.title}, developed by ${this.dev}, with a length of ${this.length} hours, have played it.`
     } else {
@@ -35,9 +30,18 @@ function addGameToLibrary(game) {
 }
 
 
+
+const exampleGame = new Game( "Warcraft III", 
+  "Blizzard Entertainment",
+  100,
+  true);
+
+addGameToLibrary(exampleGame);
+displayGames();
+
 function displayGames() {
   libContainer.replaceChildren("");
-
+  
  myLibrary.forEach((game, index) => {
    const newGame = document.createElement('div');
    newGame.className = "game";
