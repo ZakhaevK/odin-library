@@ -54,6 +54,14 @@ function addGameToLibrary(game) {
   myLibrary.push(game);
 }
 
+function validateForm() {
+  if (titleInput.validity.valueMissing) {
+    titleInput.setCustomValidity("Game entry requires a title.")
+  }
+
+  
+}
+
 const exampleGame = new Game( "Warcraft III", 
   "Blizzard Entertainment",
   100,
