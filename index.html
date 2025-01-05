@@ -9,25 +9,29 @@
 <body>
   <div id="sidebar">
     <h1>Add a game</h1>
-    <form>
+    <form novalidate>
       <ul>
       <li>
       <label for="g-title">Title</label>
       <input type="text" id="g-title" required>
+      <span class="error" aria-live="polite"></span>
     </li>
 
     <li>
       <label for="g-dev">Developer</label>
       <input type="text" id="g-dev" required>
+      <span class="error" aria-live="polite"></span>
     </li>
 
     <li>
       <label for="g-length">Length (hours)</label>
       <input type="number" id="g-length" required>
+      <span class="error" aria-live="polite"></span>
   </li>
   <li>
       <label for="g-played">Played Before?</label>
       <input type="checkbox" id="g-played">
+      <span class="error" aria-live="polite"></span>
     </li>
     <li>
       <button id="g-submit">Submit</button>

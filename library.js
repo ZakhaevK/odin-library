@@ -1,10 +1,11 @@
 // Document elements
-const libContainer = document.getElementById('library');
-const submitInput = document.getElementById('g-submit');
-const titleInput = document.getElementById('g-title');
-const devInput = document.getElementById('g-dev');
-const lengthInput = document.getElementById('g-length');
-const playedInput = document.getElementById('g-played');
+const libContainer = document.getElementById("library");
+const submitInput = document.getElementById("g-submit");
+const titleInput = document.getElementById("g-title");
+const devInput = document.getElementById("g-dev");
+const lengthInput = document.getElementById("g-length");
+const playedInput = document.getElementById("g-played");
+const requiredInputs = [titleInput, devInput, lengthInput];
 
 const myLibrary = [];
 
@@ -43,9 +44,9 @@ class Game {
 
   static getInfo(Game) {
     if (Game.played) {
-      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, have played it.`
+      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, have played it.`;
     } else {
-      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, currently not played.`
+      return `${Game.title}, developed by ${Game.dev}, with a length of ${Game.length} hours, currently not played.`;
     }
   }
 }
@@ -54,18 +55,39 @@ function addGameToLibrary(game) {
   myLibrary.push(game);
 }
 
-function validateForm() {
-  if (titleInput.validity.valueMissing) {
-    titleInput.setCustomValidity("Game entry requires a title.")
-  }
+function initialiseValidation() {
+  for (const input of requiredInputs) {
+    const inputError = input.nextElementSibling;
 
-  
+    input.addEventListener("input", () => {
+      if (input.validity.valid) {
+        inputError.textContent = "";
+        inputError.className = "error";
+      } else {
+        showError(input);
+      }
+    });
+  }
 }
 
-const exampleGame = new Game( "Warcraft III", 
+function showError(inputElement) {
+  const errorSpan = inputElement.nextElementSibling;
+
+  if (inputElement.validity.valueMissing) {
+    errorSpan.textContent = "This field is required.";
+  } else {
+    errorSpan.textContent = "Invalid input.";
+  }
+
+  errorSpan.className = "error active";
+}
+
+const exampleGame = new Game(
+  "Warcraft III",
   "Blizzard Entertainment",
   100,
-  true);
+  true
+);
 
 addGameToLibrary(exampleGame);
 displayGames();
@@ -73,65 +95,78 @@ displayGames();
 function displayGames() {
   libContainer.replaceChildren("");
 
- myLibrary.forEach((game, index) => {
-   const newGame = document.createElement('div');
-   newGame.className = "game";
+  myLibrary.forEach((game, index) => {
+    const newGame = document.createElement("div");
+    newGame.className = "game";
 
-   const titleH2 = document.createElement('h2');
-   titleH2.textContent = Game.getTitle(game);
+    const titleH2 = document.createElement("h2");
+    titleH2.textContent = Game.getTitle(game);
 
-   const devPara = document.createElement('p');
-   devPara.textContent = `Developer: ${Game.getDev(game)}`;
+    const devPara = document.createElement("p");
+    devPara.textContent = `Developer: ${Game.getDev(game)}`;
 
-   const lengthPara = document.createElement('p');
-   lengthPara.textContent = `Length: ${Game.getLength(game)} hours`;
+    const lengthPara = document.createElement("p");
+    lengthPara.textContent = `Length: ${Game.getLength(game)} hours`;
 
-   const playedPara = document.createElement('p');
-   playedPara.textContent = Game.getPlayed(game) ? 'Played: Yes' : 'Played: No';
+    const playedPara = document.createElement("p");
+    playedPara.textContent = Game.getPlayed(game)
+      ? "Played: Yes"
+      : "Played: No";
 
-   const togglepara = document.createElement('p');
-   togglepara.textContent = 'Update Game Details:';
+    const togglepara = document.createElement("p");
+    togglepara.textContent = "Update Game Details:";
 
-   const playButt = document.createElement('button');
-   playButt.textContent = 'Played';
-   playButt.addEventListener('click', () => {
-     Game.togglePlayed(game);
-     displayGames();
-   });
+    const playButt = document.createElement("button");
+    playButt.textContent = "Played";
+    playButt.addEventListener("click", () => {
+      Game.togglePlayed(game);
+      displayGames();
+    });
 
-   const deleteButt = document.createElement('button');
-   deleteButt.textContent = 'Delete';
-   deleteButt.addEventListener('click', () => {
-     myLibrary.splice(index, 1); 
-     displayGames(); 
-   });
+    const deleteButt = document.createElement("button");
+    deleteButt.textContent = "Delete";
+    deleteButt.addEventListener("click", () => {
+      myLibrary.splice(index, 1);
+      displayGames();
+    });
 
-   // Add elements to newGame div
-   newGame.appendChild(titleH2);
-   newGame.appendChild(devPara);
-   newGame.appendChild(lengthPara);
-   newGame.appendChild(playedPara);
-   newGame.appendChild(togglepara);
-   newGame.appendChild(playButt);
-   newGame.appendChild(deleteButt);
-   
-   // Append the game to the library container
-   libContainer.appendChild(newGame);
- });
+    // Add elements to newGame div
+    newGame.appendChild(titleH2);
+    newGame.appendChild(devPara);
+    newGame.appendChild(lengthPara);
+    newGame.appendChild(playedPara);
+    newGame.appendChild(togglepara);
+    newGame.appendChild(playButt);
+    newGame.appendChild(deleteButt);
+
+    // Append the game to the library container
+    libContainer.appendChild(newGame);
+  });
 }
 
 // Event Listeners
-submitInput.addEventListener('click', (e) => {
+submitInput.addEventListener("click", (e) => {
+  valid = true;
+
+  for (input of requiredInputs) {
+    if (!input.validity.valid) {
+      showError(input);
+      valid = false;
+    }
+  }
+
   e.preventDefault();
-  const title = titleInput.value;
-  const dev = devInput.value;
-  const length = lengthInput.value;
-  const played = playedInput.checked;
+  if (valid) {
+    const title = titleInput.value;
+    const dev = devInput.value;
+    const length = lengthInput.value;
+    const played = playedInput.checked;
 
-  const newGame = new Game(title, dev, length, played);
+    const newGame = new Game(title, dev, length, played);
 
-  addGameToLibrary(newGame);
-  displayGames();
-})
+    addGameToLibrary(newGame);
+    displayGames();
+  }
+});
 
-
+initialiseValidation();

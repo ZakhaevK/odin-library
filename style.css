@@ -22,10 +22,11 @@ body {
 }
 
 #sidebar li {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items:center;
-  padding: 6px 0;
+  padding: 12px 0;
 }
 
 #sidebar li:nth-child(4) {
@@ -35,6 +36,34 @@ body {
 
 #sidebar li:nth-child(5) {
   justify-content: center;
+}
+
+#sidebar input:invalid {
+  border-color: #900;
+  background-color: #fdd;
+}
+
+
+#sidebar .error {
+  position: absolute;
+  width: auto;
+  padding: 0;
+  top: 33px;
+  left: 85px;
+
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+
+  box-sizing: border-box;
+}
+
+#sidebar li:nth-child(3) .error {
+  top: 40px;
+}
+
+.error.active {
+  padding: 0.3em;
 }
 
 #library {
